@@ -1,0 +1,11 @@
+---
+# tasks file for zookeeper-kafka
+- name: Install Java
+  yum:
+    name: java-latest-openjdk
+
+- include_tasks: supervisor.yml
+
+- include_tasks: zookeeper.yml
+
+- include_tasks: kafka.yml

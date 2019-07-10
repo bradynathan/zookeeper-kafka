@@ -1,0 +1,14 @@
+---
+# handlers file for zookeeper-kafka
+- name: Reload Supervisor
+  shell: supervisorctl update
+
+- name: Restart ZooKeeper
+  supervisorctl:
+    name: zookeeper
+    state: restarted
+
+- name: Restart Kafka
+  supervisorctl:
+    name: kafka
+    state: restarted

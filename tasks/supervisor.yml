@@ -1,0 +1,12 @@
+---
+- name: Install Supervisor
+  yum:
+    name: supervisor
+
+- name: Enable Supervisor service
+  service:
+    name: supervisord
+    state: started
+    enabled: yes
+
+...

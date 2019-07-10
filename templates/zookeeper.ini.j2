@@ -1,0 +1,6 @@
+[program:zookeeper]
+user=zookeeper
+command=/opt/zookeeper/current/bin/zkServer.sh start-foreground
+redirect_stderr=true
+autorestart=true
+stdout_logfile=/var/log/supervisor/zookeeper.log

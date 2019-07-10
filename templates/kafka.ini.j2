@@ -1,0 +1,6 @@
+[program:kafka]
+user=kafka
+command=/opt/kafka/current/bin/kafka-server-start.sh /opt/kafka/current/config/server.properties
+redirect_stderr=true
+autorestart=true
+stdout_logfile=/var/log/supervisor/kafka.log

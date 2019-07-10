@@ -1,0 +1,46 @@
+---
+- name: Create a service account to run kafka
+  user:
+    name: kafka
+    home: /opt/kafka
+    comment: "Kafka Service Account"
+    system: True
+
+- name: Download Kafka
+  unarchive:
+    src: https://archive.apache.org/dist/kafka/2.3.0/kafka_2.12-2.3.0.tgz
+    dest: /opt/kafka
+    remote_src: yes
+
+- name: Link to the current Kafka
+  file:
+    src: /opt/kafka/kafka_2.12-2.3.0
+    dest: /opt/kafka/current
+    state: link
+    owner: kafka
+    group: kafka
+
+- name: Change group for kafka
+  file:
+    path: /opt/kafka
+    state: directory
+    recurse: yes
+    group: kafka
+    owner: kafka
+
+- name: Copy configurations
+  template:
+    src: server.properties.j2
+    dest: /opt/kafka/current/config/server.properties
+    owner: kafka
+    group: kafka
+  notify:
+    - Restart Kafka
+
+- name: Copy supervisor configurations
+  template:
+    src: kafka.ini.j2
+    dest: /etc/supervisord.d/kafka.ini
+  notify:
+    - Reload Supervisor
+...

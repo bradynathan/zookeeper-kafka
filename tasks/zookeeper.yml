@@ -1,0 +1,45 @@
+---
+- name: Create a service account to run zookeeper
+  user:
+    name: zookeeper
+    home: /opt/zookeeper
+    comment: "Zookeeper Service Account"
+    system: True
+
+- name: Download ZooKeeper
+  unarchive:
+    src: https://archive.apache.org/dist/zookeeper/zookeeper-3.5.5/apache-zookeeper-3.5.5-bin.tar.gz
+    dest: /opt/zookeeper
+    remote_src: yes
+
+- name: Link to the current ZooKeeper
+  file:
+    src: /opt/zookeeper/apache-zookeeper-3.5.5-bin
+    dest: /opt/zookeeper/current
+    state: link
+    owner: zookeeper
+    group: zookeeper
+
+- name: Directory for the ZooKeeper state
+  file:
+    name: /var/lib/zookeeper
+    state: directory
+    owner: zookeeper
+    group: zookeeper
+
+- name: Copy configurations
+  template:
+    src: zoo.cfg.j2
+    dest: /opt/zookeeper/current/conf/zoo.cfg
+    owner: zookeeper
+    group: zookeeper
+  notify:
+    - Restart ZooKeeper
+
+- name: Copy supervisor configurations
+  template:
+    src: zookeeper.ini.j2
+    dest: /etc/supervisord.d/zookeeper.ini
+  notify:
+    - Reload Supervisor
+...
