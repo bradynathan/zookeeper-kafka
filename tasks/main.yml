@@ -1,8 +1,10 @@
 ---
 # tasks file for zookeeper-kafka
-- name: Install Java
+- name: Install Pre-reqs
   yum:
-    name: java-latest-openjdk
+    name:
+      - java-11-openjdk
+      - tar
 
 - include_tasks: supervisor.yml
 
